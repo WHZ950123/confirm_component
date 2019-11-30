@@ -1,26 +1,63 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component{
+	constructor(props) {
+		super(props)
+		this.state = {
+			message: '确定要删除？',
+			onOk: false
+		}
+	}
+	render() {
+		return (
+			<div>
+			<Confirm
+			    message = {this.state.message}
+			    isOk = {(ok) => {
+					this.state.onOk = ok
+			    }}
+			/>
+			</div>
+		);
+	}
+
+	async componentDidMount() {
+		let value = await new Confirm({message: 'lll'})
+		if (value) {
+			console.log('yes')	
+		} else {
+			console.log('no')	
+		}
+	}
 }
 
-export default App;
+class Confirm extends React.Component{
+	constructor(props) {
+		super(props)
+		this.state = {
+			message: 'OK',
+			ok: true
+		}
+	}
+	
+	render() {
+		const { message, isOk } = this.props
+		return (
+			<div>
+				{message}
+				{isOk(this.state.ok)}
+			</div>
+		)
+	}
+	
+	componentDidMount() {
+		new Promise(resolve => {
+			setTimeout(() => {
+				resolve(true)
+			},3000)
+		})
+	}
+}
+
+export default App
